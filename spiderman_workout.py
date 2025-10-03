@@ -1,5 +1,3 @@
-import numpy as np
-
 def spiderman_workout(reps, climb_distances):
 
     total = sum(climb_distances) # Max height possible
