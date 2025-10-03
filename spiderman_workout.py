@@ -66,9 +66,18 @@ def spiderman_workout(reps, climb_distances):
     return ''.join(path)
     
 def main():
-    # Test Cases 
-    print(spiderman_workout(4, [20,20,20,20]))
-    print(spiderman_workout(6, [3, 2, 5, 3, 1, 2]))
-    print(spiderman_workout(3, [9, 7, 4]))
+    scenarioNumber = int(input())
 
-main()
+    allScenarios = []
+
+    for number in range(scenarioNumber):
+        reps = int(input())
+        climb_distances = list(map(int, input().split()))
+        result = spiderman_workout(reps, climb_distances)
+        allScenarios.append(result)
+
+    for scenario in allScenarios:
+        print(scenario)
+        
+if __name__ == "__main__":
+    main()
