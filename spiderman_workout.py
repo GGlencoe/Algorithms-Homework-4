@@ -16,49 +16,49 @@ def spiderman_workout(reps, climb_distances):
                 continue
             
             # go up
-            new_height = h + distance
-            if new_height <= total:
-                dp[i+1][new_height] = min(dp[i+1][new_height], max(dp[i][h], new_height)) # update peak height at next rep
+            newHeight = h + distance
+            if newHeight <= total:
+                dp[i+1][newHeight] = min(dp[i+1][newHeight], max(dp[i][h], newHeight)) # update peak height at next rep
 
             # go down
             if h - distance >= 0:
-                new_height = h - distance
-                dp[i+1][new_height] = min(dp[i+1][new_height], dp[i][h])
+                newHeight = h - distance
+                dp[i+1][newHeight] = min(dp[i+1][newHeight], dp[i][h])
     
     # Check if we can end at 0
     if dp[reps][0] == INF:
         return "IMPOSSIBLE"
     
     path = []
-    current_height = 0
-    target_peak = dp[reps][0]
+    curr_height = 0
+    peak = dp[reps][0] # target peak height at the end
 
     # work backwards to find path then reverse the array of moves
     for i in range(reps-1, -1, -1):
         distance = climb_distances[i]
         
         #check if came from up
-        prev_h_up = current_height - distance
-        if prev_h_up >= 0 and prev_h_up <= total + 1:
-            # max height if went up would be max(dp[i][prev_h_up], curr_h)
-            if dp[i][prev_h_up] != INF:
-                new_peak = max(dp[i][prev_h_up], current_height)
-                if new_peak == target_peak or (i<reps-1 and new_peak < target_peak):
+        previousHeightIfUp = curr_height - distance
+        if previousHeightIfUp >= 0 and previousHeightIfUp <= total + 1:
+            # max height if went up would be max(dp[i][previousHeightIfUp], curr_h)
+            if dp[i][previousHeightIfUp] != INF:
+                new_peak = max(dp[i][previousHeightIfUp], curr_height)
+                if new_peak == peak or (i<reps-1 and new_peak < peak):
                     #checks if leads to target peak
-                    if dp[i][prev_h_up] <= target_peak:
+                    if dp[i][previousHeightIfUp] <= peak:
                         path.append('U')
-                        target_peak = dp[i][prev_h_up]
-                        current_height = prev_h_up
+                        peak = dp[i][previousHeightIfUp]
+                        curr_height = previousHeightIfUp
                         continue
         
         #check if came from down
-        prev_h_down = current_height + distance
-        if prev_h_down < total + 1:
-            if dp[i][prev_h_down] != INF:
-                if dp[i][prev_h_down] <= target_peak:
+        previousHeightIfDown = curr_height + distance
+        if previousHeightIfDown < total + 1:
+            if dp[i][previousHeightIfDown] != INF:
+                if dp[i][previousHeightIfDown] <= peak:
                     path.append('D')
-                    target_peak = dp[i][prev_h_down]
-                    current_height = prev_h_down
+                    peak = dp[i][previousHeightIfDown]
+                    curr_height = previousHeightIfDown
                     continue
     
     # reverse the path to get correct order
